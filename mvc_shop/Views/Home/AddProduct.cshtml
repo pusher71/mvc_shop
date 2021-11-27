@@ -1,0 +1,53 @@
+﻿@model string
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Shop</title>
+</head>
+<body>
+    @if (@User.Identity != null && @User.Identity.IsAuthenticated)
+    {
+        <h2>Новый товар</h2>
+        <form method="post">
+            <input type="hidden" name="categoryName" value="@Model" />
+            <label>Название товара </label>
+            <input type="text" name="name" />
+            <br />
+            <label>Бренд </label>
+            <input type="text" name="brend" />
+            <br />
+            <label>Цена </label>
+            <input type="text" name="price" />
+            <br />
+            <label>Количество товара </label>
+            <input type="text" name="quantity" />
+            <br />
+            <label>Количество </label>
+            <input type="text" name="name" />
+            <br />
+            <label>Мощность </label>
+            <input type="text" name="power" />
+            <br />
+            <label>Масса </label>
+            <input type="text" name="mass" />
+            <br />
+            <label>Количество скоростей </label>
+            <input type="text" name="speedcount" />
+            <br />
+            <input type="submit" value="Создать" />
+        </form>
+    }
+    else
+    {
+        <td>Требуется авторизация для добавления товара</td>
+    }
+
+    <a href="/home">Назад</a>
+</body>
+</html>

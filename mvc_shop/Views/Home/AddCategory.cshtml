@@ -1,0 +1,29 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Shop</title>
+</head>
+<body>
+    @if (@User.Identity != null && @User.Identity.IsAuthenticated)
+    {
+        <h2>Новая категория</h2>
+        <form method="post">
+            <label>Название категории </label>
+            <input type="text" name="name" />
+            <br />
+            <input type="submit" value="Создать" />
+        </form>
+    }
+    else
+    {
+        <td>Требуется авторизация для добавления категории</td>
+    }
+
+    <a href="/home">Назад</a>
+</body>
+</html>

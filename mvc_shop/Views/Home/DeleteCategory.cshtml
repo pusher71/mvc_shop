@@ -1,0 +1,22 @@
+﻿@model int
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Shop</title>
+</head>
+<body>
+    <h2>Вы уверены, что хотите удалить категорию?</h2>
+    <form method="post">
+        <input type="hidden" name="categoryId" value="@Model" />
+        <input type="hidden" name="confirm" value="true" />
+        <input type="submit" value="Удалить" />
+    </form>
+    <a href="/home">Назад</a>
+</body>
+</html>

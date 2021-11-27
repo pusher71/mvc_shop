@@ -1,0 +1,75 @@
+﻿@model CategoryViewData
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Shop</title>
+</head>
+<body>
+    <h2>Список инструментов</h2>
+    <table border=1>
+        <tr>
+            <th>Название</th>
+            <th>Бренд</th>
+            <th>Цена</th>
+            <th>Мощность</th>
+            <th>Масса</th>
+            <th>Количество скоростей</th>
+            <th>Количество товара</th>
+            <th> </th>
+            <th> </th>
+        </tr>
+        @foreach (Product r in Model.productList)
+        {
+            <tr>
+                <td>@r.Name</td>
+                <td>@r.Brend </td>
+                <td>@r.Price</td>
+                <td>@r.Power</td>
+                <td>@r.Mass</td>
+                <td>@r.SpeedCount</td>
+                <td>@r.Quantity</td>
+                @if (@User.Identity != null && @User.Identity.IsAuthenticated)
+                {
+                    if (r.Quantity > 0)
+                    {
+                        <td>
+                            <form asp-action="BuyProduct" method="post" asp-route-productId="@r.Id" asp-route-quantity="1">
+                                <div class="form-group">
+                                    <input type="submit" value="Купить" class="btn btn-primary" />
+                                </div>
+                            </form>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>Нет в наличии</td>
+                    }
+                    <td>
+                        <form asp-action="DeleteProduct" method="post" asp-route-productId="@r.Id">
+                            <div class="form-group">
+                                <input type="submit" value="Удалить" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </td>
+                }
+                else
+                {
+                    <td>Требуется авторизация для покупки или удаления</td>
+                }
+            </tr>
+        }
+    </table>
+    @if (@User.Identity != null && @User.Identity.IsAuthenticated)
+    {
+        <a href="/home/addproduct?categoryId=@Model.categoryId">Добавить продукт</a>
+    }
+
+    <a href="/">Вернуться на главную страницу</a>
+</body>
+</html>

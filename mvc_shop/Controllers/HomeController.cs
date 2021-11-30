@@ -32,6 +32,13 @@ namespace mvc_shop.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult Search(string q)
+        {
+            var toys = _dbRepository.Search(q);
+            return Json(toys);
+        }
+
         [HttpGet]
         public IActionResult BuyProduct()
         {
@@ -57,7 +64,7 @@ namespace mvc_shop.Controllers
             return View(target.Category.Id);
         }
 
-        public IActionResult Category(int categoryId)
+        public IActionResult Category(int categoryId, int itemId = -1)
         {
             ICollection<Product> list;
             try
@@ -70,7 +77,7 @@ namespace mvc_shop.Controllers
                 return View("ErrorPage", e.Message);
             }
 
-            return View("Category", new CategoryViewData() { categoryId = categoryId, productList = list });
+            return View("Category", new CategoryViewData() { categoryId = categoryId, productList = list, itemId = itemId });
         }
 
         [HttpGet]

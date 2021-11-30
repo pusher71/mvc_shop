@@ -11,23 +11,28 @@
     <title>Shop</title>
 </head>
 <body>
+    <label for="search">Поиск товаров: </label>
+    <input id="search" type="text" name="q" />
+    <table id="searchTable"></table>
+    <input id="searchButton" type="submit" value="Найти" />
+
     <h2>Список категорий</h2>
     <table border=1>
         <tbody>
             @foreach (Category c in Model)
             {
-            <tr>
-                <td><a href="/home/category?categoryId=@c.Id">@c.Name</a></td>
-                @if (@User.Identity != null && @User.Identity.IsAuthenticated)
-                {
-                    <td><a href="/home/deletecategory?categoryId=@c.Id">Удалить</a></td>
-                }
-                else
-                {
-                    <td>Требуется авторизация для удаления категории</td>
-                }
+                <tr>
+                    <td><a href="/home/category?categoryId=@c.Id">@c.Name</a></td>
+                    @if (@User.Identity != null && @User.Identity.IsAuthenticated)
+                    {
+                        <td><a href="/home/deletecategory?categoryId=@c.Id">Удалить</a></td>
+                    }
+                    else
+                    {
+                        <td>Требуется авторизация для удаления категории</td>
+                    }
 
-            </tr>
+                </tr>
             }
         </tbody>
     </table>
@@ -45,5 +50,32 @@
             <a asp-action="Logout" asp-controller="Account" asp-route-returnUrl="/">Log out</a>
         </p>
     </div>
+
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script>
+        function viewResult() {
+            var q = $("#search").val();
+            var tableSearch = $("#searchTable");
+            var link = "";
+            tableSearch.empty()
+            if (q.length > 2) {
+                $.ajax({
+                    url: "/Home/Search",
+                    type: "POST",
+                    data: { q: q },
+                    success: function (data) {
+                        console.log(data)
+                        for (var i = 0; i < data.length; i++) {
+                            link = "<a class='filterItem' href='/Home/Category?categoryId=" + data[i]['categoryId'] + "&itemId=" + data[i]["id"] + "'>" + data[i]['name'] + "</a>";
+                            tableSearch.append("<tr><td>" + link + "</td></tr>");
+                        }
+                    }
+                })
+            }
+        }
+
+        $("#search").on("input", viewResult)
+        $("#searchButton").on("click", viewResult)
+    </script>
 </body>
 </html>

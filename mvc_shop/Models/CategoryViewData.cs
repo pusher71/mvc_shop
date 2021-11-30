@@ -4,7 +4,8 @@ namespace mvc_shop.Models
 {
     public class CategoryViewData
     {
-        public int categoryId;
-        public ICollection<Product> productList;
+        public int categoryId; //текущая категория
+        public ICollection<Product> productList; //список товаров в ней
+        public int itemId; //то, что поиск нашёл
     }
 }

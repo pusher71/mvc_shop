@@ -26,7 +26,7 @@
         </tr>
         @foreach (Product r in Model.productList)
         {
-            <tr>
+            <tr class="@(@r.Id == Model.itemId ? "found" : "default")">
                 <td>@r.Name</td>
                 <td>@r.Brend </td>
                 <td>@r.Price</td>
@@ -71,5 +71,11 @@
     }
 
     <a href="/">Вернуться на главную страницу</a>
+
+    <style>
+        .found {
+            color: red
+        }
+    </style>
 </body>
 </html>

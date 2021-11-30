@@ -134,6 +134,11 @@ namespace mvc_shop
             return _context.Products.ToList();
         }
 
+        public ICollection<Product> Search(string q)
+        {
+            return _context.Products.Where(c => c.Name.ToLower().Contains(q.ToLower())).ToList();
+        }
+
         public void UpdateProduct(Product product)
         {
             //_context.Entry(product).State = EntityState.Modified;

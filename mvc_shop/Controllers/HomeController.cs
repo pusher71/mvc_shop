@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -37,6 +38,24 @@ namespace mvc_shop.Controllers
         {
             var toys = _dbRepository.Search(q);
             return Json(toys);
+        }
+
+        public ActionResult CategorySearch(string name)
+        {
+            var category = _dbRepository.GetCategoryCollection().Find(s => s.Name.ToLower().Contains(name.ToLower()));
+            var products = category.Products;
+            Thread.Sleep(2000);
+            return PartialView(products);
+        }
+
+        [HttpPost]
+        public IActionResult AddQuantity(int productId, int count, int categoryId)
+        {
+            var product = _dbRepository.GetProductById(productId);
+            product.Quantity += count;
+            _dbRepository.UpdateProduct(product);
+            return Category(categoryId);
+            //return Redirect("~/Home/Categories?categoryId=" + Convert.ToString(categoryId));
         }
 
         [HttpGet]
@@ -131,11 +150,11 @@ namespace mvc_shop.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult AddProduct(string categoryName, string name, string brend, float price, int quantity, float power, float mass, int speedCount)
+        public IActionResult AddProduct(int categoryId, string name, string brend, float price, int quantity, float power, float mass, int speedCount)
         {
             try
             {
-                Category target = _dbRepository.GetCategoryByName(categoryName);
+                Category target = _dbRepository.GetCategoryById(categoryId);
                 int newId = _dbRepository.GetAllProducts().OrderBy(p => p.Id).Last().Id + 1;
                 _dbRepository.AddProduct(target, new Product(newId, name, brend, price, quantity, power, mass, speedCount));
                 return Index();

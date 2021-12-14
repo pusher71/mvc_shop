@@ -1,20 +1,30 @@
 ﻿@model ICollection<Category>
 
-@{
+@*@{
     Layout = null;
-}
+}*@
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <label for="search">Поиск товаров: </label>
     <input id="search" type="text" name="q" />
     <table id="searchTable"></table>
     <input id="searchButton" type="submit" value="Найти" />
+
+    <form method="post" style="display:flex" data-ajax="true" data-ajax-method="post"
+          data-ajax-url="/Home/CategorySearch" data-ajax-update="#panel" data-ajax-loading="#loading"
+          data-ajax-mode="replace">
+        <label for="searchTextField" style="line-height: 30px;">Name:</label><input id="searchTextField" type="text" name="name" class="form-text mr-1" style="border-radius:5px; margin-top:0" />
+        <input type="submit" class="btn btn-success" />
+    </form>
+    <div id="panel"></div>
+    <span id="loading" style="display:none">Идет загрузка... <i class="fa fa-spinner fa-spin" style="font-size:24px"></i></span>
 
     <h2>Список категорий</h2>
     <table border=1>
@@ -39,8 +49,33 @@
 
     @if (@User.Identity != null && @User.Identity.IsAuthenticated)
     {
-        <a href="/home/addcategory">Добавить категорию</a>
+        @*<a href="/home/addcategory">Добавить категорию</a>*@
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCategoryModal">
+            Создать категорию
+        </button>
     }
+
+    <!-- Modal -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoryModalLabel">Пополнение остатка</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/Home/AddCategory">
+                        <label>Название категории </label>
+                        <input type="text" name="name" />
+                        <br />
+                        <input type="submit" value="Создать" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div>
         <p>
@@ -57,7 +92,6 @@
             var q = $("#search").val();
             var tableSearch = $("#searchTable");
             var link = "";
-            tableSearch.empty()
             if (q.length > 2) {
                 $.ajax({
                     url: "/Home/Search",
@@ -65,6 +99,7 @@
                     data: { q: q },
                     success: function (data) {
                         console.log(data)
+                        tableSearch.empty()
                         for (var i = 0; i < data.length; i++) {
                             link = "<a class='filterItem' href='/Home/Category?categoryId=" + data[i]['categoryId'] + "&itemId=" + data[i]["id"] + "'>" + data[i]['name'] + "</a>";
                             tableSearch.append("<tr><td>" + link + "</td></tr>");
@@ -77,5 +112,7 @@
         $("#search").on("input", viewResult)
         $("#searchButton").on("click", viewResult)
     </script>
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/lib/jquery.unobtrusive-ajax.js"></script>
 </body>
 </html>

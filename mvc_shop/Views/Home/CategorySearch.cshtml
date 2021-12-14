@@ -1,0 +1,7 @@
+﻿@model ICollection<Product> 
+<ul>
+    @foreach (var item in Model)
+    {
+        <li><a href="/Home/Category?categoryId=@Convert.ToString(item.CategoryId)&itemId=@Convert.ToString(item.Id)">@item.Name</a></li>
+    }
+</ul>

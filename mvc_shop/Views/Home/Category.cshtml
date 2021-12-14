@@ -1,14 +1,15 @@
 ﻿@model CategoryViewData
 
-@{
+@*@{
     Layout = null;
-}
+}*@
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Shop</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
 </head>
 <body>
     <h2>Список инструментов</h2>
@@ -57,6 +58,11 @@
                             </div>
                         </form>
                     </td>
+                    <td>
+                        <button data-product="@r.Id" onclick="$('#productId').val($(this).data('product'))" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addQuantityModal">
+                            Пополнить
+                        </button>
+                    </td>
                 }
                 else
                 {
@@ -65,9 +71,80 @@
             </tr>
         }
     </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Пополнение остатка</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/Home/AddProduct">
+                        <input type="hidden" name="categoryId" value="@Model.categoryId" />
+                        <label>Название товара </label>
+                        <input type="text" name="name" />
+                        <br />
+                        <label>Бренд </label>
+                        <input type="text" name="brend" />
+                        <br />
+                        <label>Цена </label>
+                        <input type="text" name="price" />
+                        <br />
+                        <label>Количество товара </label>
+                        <input type="text" name="quantity" />
+                        <br />
+                        <label>Количество </label>
+                        <input type="text" name="name" />
+                        <br />
+                        <label>Мощность </label>
+                        <input type="text" name="power" />
+                        <br />
+                        <label>Масса </label>
+                        <input type="text" name="mass" />
+                        <br />
+                        <label>Количество скоростей </label>
+                        <input type="text" name="speedcount" />
+                        <br />
+                        <input type="submit" value="Создать" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addQuantityModal" tabindex="-1" role="dialog" aria-labelledby="addQuantityModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addQuantityModalLabel">Пополнение остатка</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/Home/AddQuantity">
+                        <label for="quantity">Количество</label>
+                        <input id="quantity" class="form-text" type="number" min="0" name="count" />
+                        <input hidden name="productId" id="productId" />
+                        <input hidden name="categoryId" id="categoryId" value="@Model.categoryId" />
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @if (@User.Identity != null && @User.Identity.IsAuthenticated)
     {
-        <a href="/home/addproduct?categoryId=@Model.categoryId">Добавить продукт</a>
+        @*<a href="/home/addproduct?categoryId=@Model.categoryId">Добавить продукт</a>*@
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">
+            Добавить продукт
+        </button>
     }
 
     <a href="/">Вернуться на главную страницу</a>

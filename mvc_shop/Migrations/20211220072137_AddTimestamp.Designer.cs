@@ -10,15 +10,15 @@ using mvc_shop;
 namespace mvc_shop.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211005115137_Init123")]
-    partial class Init123
+    [Migration("20211220072137_AddTimestamp")]
+    partial class AddTimestamp
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.10")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("mvc_shop.Models.Category", b =>
@@ -34,6 +34,29 @@ namespace mvc_shop.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("mvc_shop.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.Property<long>("Timestamp")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("mvc_shop.Models.Product", b =>
@@ -74,6 +97,15 @@ namespace mvc_shop.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("mvc_shop.Models.Comment", b =>
+                {
+                    b.HasOne("mvc_shop.Models.Product", "Product")
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("mvc_shop.Models.Product", b =>
                 {
                     b.HasOne("mvc_shop.Models.Category", "Category")
@@ -86,6 +118,11 @@ namespace mvc_shop.Migrations
             modelBuilder.Entity("mvc_shop.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("mvc_shop.Models.Product", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

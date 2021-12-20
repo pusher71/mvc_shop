@@ -55,7 +55,6 @@ namespace mvc_shop.Controllers
             product.Quantity += count;
             _dbRepository.UpdateProduct(product);
             return Category(categoryId);
-            //return Redirect("~/Home/Categories?categoryId=" + Convert.ToString(categoryId));
         }
 
         [HttpGet]
@@ -89,7 +88,6 @@ namespace mvc_shop.Controllers
             try
             {
                 list = _dbRepository.GetCategoryById(categoryId).Products;
-                //ICollection<Product> exp = _dbRepository.GetAllProducts();
             }
             catch (Exception e)
             {
@@ -97,6 +95,21 @@ namespace mvc_shop.Controllers
             }
 
             return View("Category", new CategoryViewData() { categoryId = categoryId, productList = list, itemId = itemId });
+        }
+
+        public IActionResult Comments(int productId)
+        {
+            IEnumerable<Comment> list;
+            try
+            {
+                list = _dbRepository.GetProductById(productId).Comments.Where(p => p.Timestamp > DateTime.Now.Ticks - 864000000000000);
+            }
+            catch (Exception e)
+            {
+                return View("ErrorPage", e.Message);
+            }
+
+            return View("Comments", list);
         }
 
         [HttpGet]
@@ -178,6 +191,44 @@ namespace mvc_shop.Controllers
             try
             {
                 _dbRepository.DeleteProduct(_dbRepository.GetProductById(productId));
+                return Index();
+            }
+            catch (Exception e)
+            {
+                return View("ErrorPage", e.Message);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult AddComment(int productId, string text)
+        {
+            try
+            {
+                Product target = _dbRepository.GetProductById(productId);
+                int newId = _dbRepository.GetAllComments().OrderBy(c => c.Id).Last().Id + 1;
+                Comment newComment = new Comment(newId, text, DateTime.Now.Ticks);
+                _dbRepository.AddComment(target, newComment);
+                return Index();
+            }
+            catch (Exception e)
+            {
+                return View("ErrorPage", e.Message);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult DeleteComment()
+        {
+            return View("ForbiddenDeleteComment");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult DeleteComment(int commentId)
+        {
+            try
+            {
+                _dbRepository.DeleteComment(_dbRepository.GetCommentById(commentId));
                 return Index();
             }
             catch (Exception e)

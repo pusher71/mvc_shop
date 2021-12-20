@@ -24,6 +24,7 @@
             <th>Количество товара</th>
             <th> </th>
             <th> </th>
+            <th> </th>
         </tr>
         @foreach (Product r in Model.productList)
         {
@@ -35,6 +36,7 @@
                 <td>@r.Mass</td>
                 <td>@r.SpeedCount</td>
                 <td>@r.Quantity</td>
+                <td><a href="/home/comments?productId=@r.Id">Комментарии</a></td>
                 @if (@User.Identity != null && @User.Identity.IsAuthenticated)
                 {
                     if (r.Quantity > 0)

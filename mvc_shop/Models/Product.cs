@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace mvc_shop.Models
 {
@@ -28,6 +30,8 @@ namespace mvc_shop.Models
         public float Mass { get; set; }
         public int SpeedCount { get; set; }
 
+        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
         public Product(int id, string name, string brend, float price, int quantity, float power, float mass, int speedCount)
         {
             Id = id;
@@ -46,6 +50,11 @@ namespace mvc_shop.Models
             if (Quantity < quantity)
                 throw new System.Exception("Ошибка. Товар уже куплен");
             Quantity -= quantity;
+        }
+
+        public Comment GetCommentById(int commentId)
+        {
+            return Comments.FirstOrDefault(c => c.Id == commentId);
         }
     }
 }

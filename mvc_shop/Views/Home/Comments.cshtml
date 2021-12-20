@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Comment>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Shop</title>
+</head>
+<body>
+    <h2>Комментарии</h2>
+    <table border=1>
+        <tr>
+            <th>Текст комментария</th>
+            <th>Timestamp</th>
+            <th> </th>
+        </tr>
+        @foreach (Comment c in Model)
+        {
+            <tr>
+                <td>@c.Text</td>
+                <td>@c.Timestamp</td>
+                @if (@User.Identity != null && @User.Identity.IsAuthenticated)
+                {
+                    <td>
+                        <form asp-action="DeleteComment" method="post" asp-route-commentId="@c.Id">
+                            <div class="form-group">
+                                <input type="submit" value="Удалить" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </td>
+                }
+                else
+                {
+                    <td>Требуется авторизация для удаления комментария</td>
+                }
+            </tr>
+        }
+    </table>
+    <a href="/">Вернуться на главную страницу</a>
+</body>
+</html>

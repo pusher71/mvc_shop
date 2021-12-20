@@ -11,22 +11,25 @@ namespace mvc_shop
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         public DataContext()
         {
             _ = Categories.ToList();
             _ = Products.ToList();
+            _ = Comments.ToList();
         }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
             _ = Categories.ToList();
             _ = Products.ToList();
+            _ = Comments.ToList();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=jsnet.ru;Port=23112;Database=db7;Username=user7;Password=user7pass476");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=mvc_shop;Username=postgres;Password=1234");
         }
     }
 }

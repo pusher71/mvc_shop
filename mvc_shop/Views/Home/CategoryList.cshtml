@@ -15,7 +15,7 @@
     <label for="search">Поиск товаров: </label>
     <input id="search" type="text" name="q" />
     <table id="searchTable"></table>
-    <input id="searchButton" type="submit" value="Найти" />
+    <input id="searchButton" type="submit" value="Найти" class="btn btn-success" />
 
     <form method="post" style="display:flex" data-ajax="true" data-ajax-method="post"
           data-ajax-url="/Home/CategorySearch" data-ajax-update="#panel" data-ajax-loading="#loading"
@@ -54,6 +54,21 @@
             Создать категорию
         </button>
     }
+
+    <br />
+
+    <h2>Создать комментарий</h2>
+    <form method="post" action="/Home/AddComment">
+        <label>ID товара </label>
+        <input type="text" name="productId" />
+        <br />
+        <label>Тескст </label>
+        <input type="text" name="text" />
+        <br />
+        <input type="submit" value="Создать" />
+    </form>
+
+    <br />
 
     <!-- Modal -->
     <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">

@@ -72,6 +72,11 @@ namespace mvc_shop
             return _context.Categories.FirstOrDefault(c => c.Name == categoryName);
         }
 
+        public Comment GetCommentById(int commentId)
+        {
+            return _context.Comments.FirstOrDefault(c => c.Id == commentId);
+        }
+
         public void AddCategory(Category category)
         {
             if (_context.Categories.Contains(category))
@@ -118,6 +123,20 @@ namespace mvc_shop
             _context.SaveChanges();
         }
 
+        public void AddComment(Product product, Comment comment)
+        {
+            product.Comments.Add(comment);
+            _context.Comments.Add(comment);
+            _context.SaveChanges();
+        }
+
+        public void DeleteComment(Comment comment)
+        {
+            comment.Product.Comments.Remove(comment);
+            _context.Comments.Remove(comment);
+            _context.SaveChanges();
+        }
+
         public Product GetProductById(int productId)
         {
             ICollection<Product> products = GetAllProducts();
@@ -132,6 +151,11 @@ namespace mvc_shop
         public ICollection<Product> GetAllProducts()
         {
             return _context.Products.ToList();
+        }
+
+        public ICollection<Comment> GetAllComments()
+        {
+            return _context.Comments.ToList();
         }
 
         public ICollection<Product> Search(string q)
